@@ -3,18 +3,26 @@
 *
 *
  */
+import ReactNative from 'react-native';
+
+/* load external files */
+const StatusBar = require('./components/StatusBar');
+const ActionButton = require('./components/ActionButton');
+const ListItem = require('./components/ListItem');
+const styles = require('./styles.js');
+
 
 import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  ListView
 } from 'react-native';
 
 import * as firebase from 'firebase';
 
-const styles = require('./styles.js')
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -28,13 +36,36 @@ const firebaseConfig = {
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 class GroceryApp extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2,
+      })
+    };
+  }/* end constructor(props) */
+
+  _renderItem(item) {
+    return (
+      <ListItem item={item} onpress={() => {}} />
+    );
+  }/* end _renderItem(item) */
+
+
   render() {
     return (
-      <View style="{styles.container}">
-          <Text>I’m a container lol!</Text>
-      </View>
-    );
-  }
-}
+          <View style={styles.container}>
+            <StatusBar title="Grocery List"/>
+            <ListView
+              datasource={this.state.dataSource}
+              renderrow={this._renderItem.bind(this)}
+              style={styles.listview}/>
+
+            <ActionButton onPress={this._addItem.bind(this)} title="Add" />
+          </View>
+    );/* return  */
+  }/* end render() */
+}/* end class GroceryApp extends Component */
 
 AppRegistry.registerComponent('GroceryApp', () => GroceryApp);
