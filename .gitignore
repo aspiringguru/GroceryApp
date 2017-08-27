@@ -11,3 +11,7 @@ yarn.lock
 .babelrc
 .buckconfig
 .flowconfig
+
+_tests_/
+.gitattributes
+.gitignore
